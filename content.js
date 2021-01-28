@@ -5,7 +5,7 @@ for(var i = 0; i < links.length; i++){
 }
 var url = "http://127.0.0.1:8080/";
 var method = "POST";
-var postData = "https://google.com/";
+var postData = "https://www.w3schools.com/js/js_json_html.asp";
 var async = true;
 var req = new XMLHttpRequest();
 
