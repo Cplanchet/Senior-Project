@@ -354,12 +354,7 @@ http.createServer(function (req, res) {
 			console.log("Malware detected: " + A..result);	
 		}
 
-
-
-
-
-
-		console.log(res);
+		res.write(JSON.stringify(isURLMalicious))
 		return;
 	});
 }).listen(8080);
