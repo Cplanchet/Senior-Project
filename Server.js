@@ -3,15 +3,18 @@ var nvt = require('node-virustotal');
 const instance = nvt.makeAPI();
 const key = instance.setKey('79bfba3b780f87a05740ec168ae0a808791760cf644a4ed8ac2d77f7ddd51352');
 http.createServer(function (req, res) {
+	if(req.method === "POST"){
+
+	}
 	var url = nvt.sha256('http://google.com/');
-	res.write("received message");
 	const test = instance.urlLookup(url, function(err, res){
 		if(err){
 			console.log("url lookup failed");
 			return;
 		}
 		var isURLMalicious = false;
-		var ResultOBJ= res;
+		var ResultOBJ = res;
+		console.log(ResultOBJ);
 		//var Analyses = JSON.parse(ResultOBJ);
 		var Analyses = ResultOBJ;
 		var A = Analyses.data.attributes.last_analysis_results;
@@ -35,7 +38,7 @@ http.createServer(function (req, res) {
 		}
 		if(A["Antiy-AVL"].category == "malicious" || A["Antiy-AVL"].category == "suspicious"){
 			isURLMalicious = true;
-			console.log("Malware detected: " + A.["Antiy-AVL"].result);	
+			console.log("Malware detected: " + A["Antiy-AVL"].result);	
 		}
 		if(A.Armis.category == "malicious" || A.Armis.category == "suspicious"){
 			isURLMalicious = true;
@@ -55,7 +58,7 @@ http.createServer(function (req, res) {
 		}
 		if(A["BADWARE.INFO"].category == "malicious" || A["BADWARE.INFO"].category == "suspicious"){
 			isURLMalicious = true;
-			console.log("Malware detected: " + A.["BADWARE.INFO"].result);	
+			console.log("Malware detected: " + A["BADWARE.INFO"].result);	
 		}
 		if(A["Baidu-International"].category == "malicious" || A["Baidu-International"].category == "suspicious"){
 			isURLMalicious = true;
@@ -349,12 +352,9 @@ http.createServer(function (req, res) {
 			isURLMalicious = true;
 			console.log("Malware detected: " + A.zvelo.result);	
 		}
-		if(A..category == "malicious" || A..category == "suspicious"){
-			isURLMalicious = true;
-			console.log("Malware detected: " + A..result);	
-		}
-
-		res.write(JSON.stringify(isURLMalicious))
+		//res.write(JSON.stringify(isURLMalicious))
+		//res.end();
 		return;
+
 	});
 }).listen(8080);

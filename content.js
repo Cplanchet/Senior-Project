@@ -1,9 +1,3 @@
-chrome.contextMenus.create({
-	contexts:"link",
-	type: "normal",
-	id: "CM"
-	});
-}
 var url = "http://127.0.0.1:8080/";
 var method = "POST";
 var postData = "https://www.w3schools.com/js/js_json_html.asp";
