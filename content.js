@@ -15,22 +15,22 @@ req.send(postData);
 console.log("sent message");
 
 var asyncGet = function(){
-	this.get = function(url, callback){
+	this.get = function(url){
 		var getReq = new XMLHttpRequest();
 		getReq.onreadystatechange = function(){
 			if(getReq.readyState == 4 && getReq.status == 200){
-				callback(getReq.responseText)
+				console.log("Response recieved")
 			}
 		}
 		getReq.open("GET", url, true);
+		getReq.onload = () =>{
+			const data = JSON.parse(getReq.response);
+			console.log(data);
+		}
 		getReq.send(null);
 	
 	}		
 
-}
-
-function handleGetData(data){
-	console.log(data);
 }
 var UrlData = new asyncGet();
 UrlData.get(url, handleGetData());

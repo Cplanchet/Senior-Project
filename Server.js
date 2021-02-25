@@ -1,12 +1,13 @@
-var http = require('http');
+"use strict";
 var nvt = require('node-virustotal');
+const express = require("express");
+
+const app = express();
 const instance = nvt.makeAPI();
 const key = instance.setKey('79bfba3b780f87a05740ec168ae0a808791760cf644a4ed8ac2d77f7ddd51352');
-http.createServer(function (req, res) {
-	if(req.method === "POST"){
 
-	}
 	var url = nvt.sha256('http://google.com/');
+	if(false){
 	const test = instance.urlLookup(url, function(err, res){
 		if(err){
 			console.log("url lookup failed");
@@ -15,8 +16,8 @@ http.createServer(function (req, res) {
 		var isURLMalicious = false;
 		var ResultOBJ = res;
 		console.log(ResultOBJ);
-		//var Analyses = JSON.parse(ResultOBJ);
-		var Analyses = ResultOBJ;
+		var Analyses = JSON.parse(ResultOBJ);
+		//var Analyses = ResultOBJ;
 		var A = Analyses.data.attributes.last_analysis_results;
 
 		//Check each service to see if their results
@@ -352,9 +353,21 @@ http.createServer(function (req, res) {
 			isURLMalicious = true;
 			console.log("Malware detected: " + A.zvelo.result);	
 		}
-		//res.write(JSON.stringify(isURLMalicious))
-		//res.end();
+		res.write(JSON.stringify(isURLMalicious))
+		res.end();
 		return;
-
 	});
-}).listen(8080);
+	}
+	app.get("/", (req, res) => {
+		console.log(req.headers)
+		
+		res.send({data: "hi"});
+		res.end();
+	});
+	app.listen(8080, err => {
+		if (err) {
+			console.log("Issue detected");
+			return;
+		}
+		console.log("Listening on port 8080");
+	});
