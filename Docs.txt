@@ -90,3 +90,11 @@ Week of 1/31/21:
 Week of 2/7/21:
 	This week I finished sorting through data and started working on sending an object containing the results back to the extension. In addition to this I also changed the scope of the program as follows: The program will not longer
 	attempt to scan every link on the page due to restrictions created by the VirusTotal Basic Api, it will now scan the first link on the page as a proof of concept.
+Week of 2/14/21:
+	I began working on sending a simple object form the node.js server back to the extension using a get request. I set up the get request handler but a cors violation error prevented the information from being sent
+Week of 2/21/21:
+	I worked through the CORS error and found that one main issue is the fact that I am testing without importing the files into an extension resulting in the origin being automatically set to null. I also recreated the server to
+	use express rather than http for data transfer
+Week of 2/28/21:
+	I began working on handling cases in which the link ends up being malicious by warning the user with a popup and removing the link from view. I started getting CORS errors again, but this time the fix should be as simple as
+	adding CORS headers into the server 

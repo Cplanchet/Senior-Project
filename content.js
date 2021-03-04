@@ -1,8 +1,11 @@
+var links = document.getElementsByTagName("a");
 var url = "http://127.0.0.1:8080/";
 var method = "POST";
-var postData = "https://www.w3schools.com/js/js_json_html.asp";
+var postData = {"url": links[1].href};
 var async = true;
 var req = new XMLHttpRequest();
+
+var Temp = true
 
 req.onload = function(){
 	var status = req.status;
@@ -10,7 +13,7 @@ req.onload = function(){
 	console.log(data);
 }
 req.open(method, url, async);
-//req.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+req.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
 req.send(postData);
 console.log("sent message");
 
@@ -33,4 +36,10 @@ var asyncGet = function(){
 
 }
 var UrlData = new asyncGet();
-UrlData.get(url, handleGetData());
+UrlData.get(url);
+
+if(Temp){
+	console.log(links[1].href);
+	window.alert("Malware Detected in URL " + links[1].href);
+	links[1].style.visibility = "hidden";
+}
