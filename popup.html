@@ -2,10 +2,29 @@
 <html>
 <head>
 <title>Scanner Home</title>
+<style>
+	body{
+		background-color:#858585;
+		background-image:url("icon.png");
+		background-repeat:no-repeat;
+		text-align:center;
+		color:white;
+		text-shadow: 2px 2px black;
+	}
+</style>
 <script src="popup.js"></script>
 </head>
 <body>
-<h1>Options UI and Power On/Off go here</h1>
-<button id = "BUTTON"> Temp button </button>
-</body>
+<h1>Options</h1>
+<input style ="margin-bottom:10px" type="checkbox" id="PopupBox" name  ="Enable Popups" value="popups">
+<lable for="PopupBox"> Enable Popups<br></lable>
+
+<input style ="margin-bottom:10px" type="checkbox" id="DisableBox" name  ="Disable Links" value="disable">
+<lable for="DisableBox">Disable Malicious links <br></lable>
+
+<input style ="margin-bottom:10px" type="checkbox" id="HighlightBox" name  ="Enable highlights" value="highlight">
+<lable for="HighlightBox">Highlight Malicous links<br></lable>
+
+<button onclick="buttonPressed()">Save</button>
 </html>
+</body>
