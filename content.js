@@ -38,8 +38,18 @@ var asyncGet = function(){
 var UrlData = new asyncGet();
 UrlData.get(url);
 
+
 if(Temp){
-	console.log(links[1].href);
-	window.alert("Malware Detected in URL " + links[1].href);
-	links[1].style.visibility = "hidden";
+	chrome.runtime.sendMessage({request:"action"}, function(response) {
+		var actions = response;
+	});
+	console.log(links[1].href);    
+	if(actions.Popup)
+		window.alert("Malware Detected in URL " + links[1].href);
+	if(actions.Disable)
+		links[1].style.visibility = "hidden";
+	else if(actions.Highlight)
+		links[1].style.color = "red";
+
+	
 }
