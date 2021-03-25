@@ -5,22 +5,23 @@ const express = require("express");
 const app = express();
 const instance = nvt.makeAPI();
 const key = instance.setKey('79bfba3b780f87a05740ec168ae0a808791760cf644a4ed8ac2d77f7ddd51352');
+var isURLMalicious
 	
 
 	app.post('/', function (req, res){
 		console.log(req.body);
 		var url = nvt.sha256('http://google.com/');
-		if(false){
+		try{
 		const test = instance.urlLookup(url, function(err, res){
 			if(err){
 				console.log("url lookup failed");
 				return;
 			}
-			var isURLMalicious = false;
+			isURLMalicious = false;
 			var ResultOBJ = res;
 			console.log(ResultOBJ);
-			var Analyses = JSON.parse(ResultOBJ);
-			//var Analyses = ResultOBJ;
+			//var Analyses = JSON.parse(ResultOBJ);
+			var Analyses = ResultOBJ;
 			var A = Analyses.data.attributes.last_analysis_results;
 
 			//Check each service to see if their results
@@ -359,12 +360,15 @@ const key = instance.setKey('79bfba3b780f87a05740ec168ae0a808791760cf644a4ed8ac2
 			return;
 		});
 		}
+		catch{
+			console.log("falied to lookup URL")
+		}
 	});
 	
 	app.get("/", (req, res) => {
 		console.log(req.headers)
 		
-		res.send({data: "hi"});
+		res.send({data: isURLMalicious});
 		res.end();
 	});
 	app.listen(8080, err => {

@@ -98,3 +98,11 @@ Week of 2/21/21:
 Week of 2/28/21:
 	I began working on handling cases in which the link ends up being malicious by warning the user with a popup and removing the link from view. I started getting CORS errors again, but this time the fix should be as simple as
 	adding CORS headers into the server 
+Week of 3/7/21:
+	This week I implemented an options page that can be accessed from the main extension icon. This options page allows the user to change the way the extension reacts to hits from VirusTotal. The three options that can be
+	toggled right now are popups, highlighted text of malicious URLs, and removing malicious URLs from the page. My next step is to send the data stored in the options page to the content script
+Week of 3/14/21:
+	This week I added comminication between the extension options page script and the content script. Now the content script will request the option variables from the options page and use that information to decide how to react 
+	to malicious URLs
+Week of 3/21/21:
+	This week I began testing and bug fixes. The first bug I fixed was the server crashing when the VirusTotal URL lookup fails. I also began compiling a list of bugs to get a grip on what needs to be done before submission
