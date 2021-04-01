@@ -1,22 +1,28 @@
 "use strict";
 var nvt = require('node-virustotal');
 const express = require("express");
-
+const bodyParser = require("body-parser");
+ 
 const app = express();
 const instance = nvt.makeAPI();
 const key = instance.setKey('79bfba3b780f87a05740ec168ae0a808791760cf644a4ed8ac2d77f7ddd51352');
-var isURLMalicious
+var isURLMalicious;
 	
-
+	app.use(bodyParser.urlencoded({ extended: false}));
+	app.use(bodyParser.json());
 	app.post('/', function (req, res){
 		console.log(req.body);
-		var url = nvt.sha256('http://google.com/');
+		try{
+		var url = nvt.sha256(req.body.url);
+		} catch{
+			console.log("URL failed to convert");
+		}
 		try{
 		const test = instance.urlLookup(url, function(err, res){
 			if(err){
 				console.log("url lookup failed");
 				return;
-			}
+			} 
 			isURLMalicious = false;
 			var ResultOBJ = res;
 			console.log(ResultOBJ);
