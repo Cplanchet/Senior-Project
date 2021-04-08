@@ -11,7 +11,10 @@ var isURLMalicious;
 	app.use(bodyParser.urlencoded({ extended: false}));
 	app.use(bodyParser.json());
 	app.post('/', function (req, res){
-		console.log(req.body);
+		res.header('Acess-Control-Allow-Origins', '*');
+		res.header('Access-Control-Allow-Methods', 'POST');
+		res.header('Access-control-allow-Headers', 'Content-Type');
+		console.log("Data: " + req.body);
 		try{
 		var url = nvt.sha256(req.body.url);
 		} catch{
@@ -30,6 +33,7 @@ var isURLMalicious;
 			var Analyses = ResultOBJ;
 			var A = Analyses.data.attributes.last_analysis_results;
 
+			if(false){
 			//Check each service to see if their results
 			if(A.ADMINUSLabs.category == "malicious" || A.ADMINUSLabs.category == "suspicious"){
 				isURLMalicious = true;
@@ -362,7 +366,7 @@ var isURLMalicious;
 			if(A.zvelo.category == "malicious" || A.zvelo.category == "suspicious"){
 				isURLMalicious = true;
 				console.log("Malware detected: " + A.zvelo.result);	
-			}
+			} }
 			return;
 		});
 		}
@@ -373,7 +377,9 @@ var isURLMalicious;
 	
 	app.get("/", (req, res) => {
 		console.log(req.headers)
-		
+		res.header('Access-Control-Allow-Origins', '*');
+		res.header('Access-Control-Allow-Methods', 'GET');
+		res.header('Access-control-allow-Headers', 'Content-Type');
 		res.send({data: isURLMalicious});
 		res.end();
 	});

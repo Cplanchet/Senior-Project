@@ -40,16 +40,15 @@ UrlData.get(url);
 
 
 if(Temp){
-	chrome.runtime.sendMessage({request:"action"}, function(response) {
+	chrome.tabs.sendMessage({request:"action"}, function(response) {
+		console.log(response)
 		var actions = response;
+		//console.log(links[1].href);    
+		if(actions.Popup)
+			window.alert("Malware Detected in URL " + links[1].href);
+		if(actions.Disable)
+			links[1].style.visibility = "hidden";
+		else if(actions.Highlight)
+			links[1].style.color = "red";
 	});
-	console.log(links[1].href);    
-	if(actions.Popup)
-		window.alert("Malware Detected in URL " + links[1].href);
-	if(actions.Disable)
-		links[1].style.visibility = "hidden";
-	else if(actions.Highlight)
-		links[1].style.color = "red";
-
-	
 }

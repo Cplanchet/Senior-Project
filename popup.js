@@ -1,15 +1,18 @@
-var Popups;
-var DisableLinks;
-var HighlightLinks;
+var Popups = false;
+var DisableLinks = false;
+var HighlightLinks = false;
 var ActionOBJ = {Popup: true, Disable: true, Highlight:true};
 
 //FIXME --NEEDS to be converted to an onCLick Listener on the button not an inline function call
-document.addListener("DOMContentLoaded", function(){
-	var save = documment.getElementById("Save");
+document.addEventListener("DOMContentLoaded", function(){
+	var save = document.getElementById("Save");
 
-	save.addEventListener("click", buttonPressed());
+	save.addEventListener("click", function(){
+		buttonPressed();
+	});
 });
 function buttonPressed(){
+	console.log("pressed");
 	if(document.getElementById("PopupBox").checked){
 		Popups = true;
 	}
@@ -31,8 +34,9 @@ function buttonPressed(){
 		HighlightLinks = false
 	}
 }
-chrome.runtime.onMessage.addListener(
+chrome.runtime.onMessageExternal.addListener(
   function(request, sender, sendResponse) {
+    console.log("Message Recieved");
     if (request.request == "action"){
     	ActionOBJ.Popup = Popups;
     	ActionOBJ.Disable = DisableLinks;
