@@ -6,7 +6,10 @@ var async = true;
 var req = new XMLHttpRequest();
 
 var Temp = true
-
+var test = chrome.runtime.getBackgroundPage((Window) =>{
+	console.log(Window);
+});
+test.SayHi();
 req.onload = function(){
 	var status = req.status;
 	var data = req.responseText;
@@ -40,15 +43,15 @@ UrlData.get(url);
 
 
 if(Temp){
-	chrome.tabs.sendMessage({request:"action"}, function(response) {
-		console.log(response)
-		var actions = response;
+	//chrome.tabs.sendMessage({request:"action"}, function(response) {
+		//console.log(response)
+		//var actions = response;
 		//console.log(links[1].href);    
-		if(actions.Popup)
-			window.alert("Malware Detected in URL " + links[1].href);
-		if(actions.Disable)
-			links[1].style.visibility = "hidden";
-		else if(actions.Highlight)
-			links[1].style.color = "red";
-	});
+		//if(actions.Popup)
+			//window.alert("Malware Detected in URL " + links[1].href);
+		//if(actions.Disable)
+			//links[1].style.visibility = "hidden";
+		//else if(actions.Highlight)
+			//links[1].style.color = "red";
+	//});
 }

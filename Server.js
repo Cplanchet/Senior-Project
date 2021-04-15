@@ -11,9 +11,6 @@ var isURLMalicious;
 	app.use(bodyParser.urlencoded({ extended: false}));
 	app.use(bodyParser.json());
 	app.post('/', function (req, res){
-		res.header('Acess-Control-Allow-Origins', '*');
-		res.header('Access-Control-Allow-Methods', 'POST');
-		res.header('Access-control-allow-Headers', 'Content-Type');
 		console.log("Data: " + req.body);
 		try{
 		var url = nvt.sha256(req.body.url);
@@ -376,10 +373,6 @@ var isURLMalicious;
 	});
 	
 	app.get("/", (req, res) => {
-		console.log(req.headers)
-		res.header('Access-Control-Allow-Origins', '*');
-		res.header('Access-Control-Allow-Methods', 'GET');
-		res.header('Access-control-allow-Headers', 'Content-Type');
 		res.send({data: isURLMalicious});
 		res.end();
 	});

@@ -33,15 +33,5 @@ function buttonPressed(){
 	else{ 
 		HighlightLinks = false
 	}
+	browser.tabs.executeScript({file: "content.js"})
 }
-chrome.runtime.onMessageExternal.addListener(
-  function(request, sender, sendResponse) {
-    console.log("Message Recieved");
-    if (request.request == "action"){
-    	ActionOBJ.Popup = Popups;
-    	ActionOBJ.Disable = DisableLinks;
-    	ActionOBJ.Highlight = HighlightLinks;
-    	sendResponse(ActionOBJ);
-  	}
-  }
-);
