@@ -1,37 +1,25 @@
 "use strict";
-var nvt = require('node-virustotal');
 const express = require("express");
-const bodyParser = require("body-parser");
- 
+const bodyparser = require("body-parser");
+const nvt = require('node-virustotal');
+const cors = require("cors");
+
 const app = express();
 const instance = nvt.makeAPI();
 const key = instance.setKey('79bfba3b780f87a05740ec168ae0a808791760cf644a4ed8ac2d77f7ddd51352');
-var isURLMalicious;
-	
-	app.use(bodyParser.urlencoded({ extended: false}));
-	app.use(bodyParser.json());
-	app.post('/', function (req, res){
-		console.log("Data: " + req.body);
-		try{
-		var url = nvt.sha256(req.body.url);
-		} catch{
-			console.log("URL failed to convert");
-		}
-		try{
-		const test = instance.urlLookup(url, function(err, res){
-			if(err){
-				console.log("url lookup failed");
-				return;
-			} 
-			isURLMalicious = false;
-			var ResultOBJ = res;
-			console.log(ResultOBJ);
-			//var Analyses = JSON.parse(ResultOBJ);
-			var Analyses = ResultOBJ;
-			var A = Analyses.data.attributes.last_analysis_results;
+var isURLMalicious = false;
 
-			if(false){
-			//Check each service to see if their results
+app.use(bodyparser.text());
+app.use(cors());
+app.post('/', function(req, res) {
+	console.log(req.headers);
+	console.log(req.body);
+	var url = nvt.sha256(req.body);
+	try{
+		const lookup = instance.urlLookup(url, function(err, res){
+			var FoundOBJ = JSON.parse(res);
+			console.log(FoundOBJ.data.attributes.last_analysis_stats);
+			var A = FoundOBJ.data.attributes.last_analysis_results;
 			if(A.ADMINUSLabs.category == "malicious" || A.ADMINUSLabs.category == "suspicious"){
 				isURLMalicious = true;
 				console.log("Malware detected: " + A.ADMINUSLabs.result);
@@ -39,10 +27,6 @@ var isURLMalicious;
 			if(A["AICC (MONITORAPP)"].category == "malicious" || A["AICC (MONITORAPP)"].category == "suspicious"){
 				isURLMalicious = true;
 				console.log("Malware detected: " + A["AICC (MONITORAPP)"].result);
-			}
-			if(A["AegisLap Webguard"].category == "malicious" || A["AegisLap Webguard"].category == "suspicious"){
-				isURLMalicious = true;
-				console.log("Malware detected: " + A["AICC (MONITORAPP)"].result);	
 			}
 			if(A.AlienVault.category == "malicious" || A.AlienVault.category == "suspicious"){
 				isURLMalicious = true;
@@ -180,10 +164,6 @@ var isURLMalicious;
 				isURLMalicious = true;
 				console.log("Malware detected: " + A.GreenSnow.result);	
 			}
-			if(A["Hoptile Industries"].category == "malicious" || A["Hoptile Industries"].category == "suspicious"){
-				isURLMalicious = true;
-				console.log("Malware detected: " + A["Hoptile Industries"].result);	
-			}
 			if(A.IPsum.category == "malicious" || A.IPsum.category == "suspicious"){
 				isURLMalicious = true;
 				console.log("Malware detected: " + A.IPsum.result);	
@@ -191,10 +171,6 @@ var isURLMalicious;
 			if(A.K7AntiVirus.category == "malicious" || A.K7AntiVirus.category == "suspicious"){
 				isURLMalicious = true;
 				console.log("Malware detected: " + A.K7AntiVirus.result);	
-			}
-			if(A.Kespersky.category == "malicious" || A.Kespersky.category == "suspicious"){
-				isURLMalicious = true;
-				console.log("Malware detected: " + A.Kespersky.result);	
 			}
 			if(A.Lumu.category == "malicious" || A.Lumu.category == "suspicious"){
 				isURLMalicious = true;
@@ -207,10 +183,6 @@ var isURLMalicious;
 			if(A.MalSilo.category == "malicious" || A.MalSilo.category == "suspicious"){
 				isURLMalicious = true;
 				console.log("Malware detected: " + A.MalSilo.result);	
-			}
-			if(A["Malware Domain BlockList"].category == "malicious" || A["Malware Domain BlockList"].category == "suspicious"){
-				isURLMalicious = true;
-				console.log("Malware detected: " + A["Malware Domain BlockList"].result);	
 			}
 			if(A.MalwareDomainList.category == "malicious" || A.MalwareDomainList.category == "suspicious"){
 				isURLMalicious = true;
@@ -332,10 +304,6 @@ var isURLMalicious;
 				isURLMalicious = true;
 				console.log("Malware detected: " + A["VX Vault"].result);	
 			}
-			if(A["Virusdie External Site Scan"].category == "malicious" || A["Virsudie External Site Scan"].category == "suspicious"){
-				isURLMalicious = true;
-				console.log("Malware detected: " + A["Virusdie External Site Scan"].result);	
-			}
 			if(A["Web Security Guard"].category == "malicious" || A["Web Security Guard"].category == "suspicious"){
 				isURLMalicious = true;
 				console.log("Malware detected: " + A["Web Security Guard"].result);	
@@ -363,23 +331,21 @@ var isURLMalicious;
 			if(A.zvelo.category == "malicious" || A.zvelo.category == "suspicious"){
 				isURLMalicious = true;
 				console.log("Malware detected: " + A.zvelo.result);	
-			} }
+			}
 			return;
 		});
-		}
-		catch{
-			console.log("falied to lookup URL")
-		}
-	});
-	
-	app.get("/", (req, res) => {
-		res.send({data: isURLMalicious});
-		res.end();
-	});
-	app.listen(8080, err => {
-		if (err) {
-			console.log("Issue detected");
-			return;
-		}
-		console.log("Listening on port 8080");
-	});
+	} catch {
+		console.log("URL lookup failed");
+	}
+	if(isURLMalicious){
+		res.send("true");
+	} else {
+		res.send("false");
+	}
+});
+var server = app.listen(8080, function(){
+	var host = server.address().address;
+	var port = server.address().port
+
+	console.log("Listening on http://%s:%s", host, port);
+});
